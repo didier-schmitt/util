@@ -1,2 +1,3 @@
 # util
-Basic datastructures for Go
+
+Basic data structures for Go
