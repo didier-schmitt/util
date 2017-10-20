@@ -14,7 +14,7 @@ func Test_Queue(t *testing.T) {
 	var x = "test"
 	q.Enqueue(x)
 	if q.Size() != 1 {
-		t.Error("Enqueue should increase the stack size")
+		t.Error("Enqueue should increase the queue size")
 	}
 
 	var n = 5
