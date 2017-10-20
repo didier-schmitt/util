@@ -16,7 +16,7 @@ func Test_Stack(t *testing.T) {
 		s.Push(i)
 	}
 	if s.Size() != n {
-		t.Errorf("Size is wrong: expected %d but got %d", s.Size(), n)
+		t.Errorf("Size is wrong: expected %d but got %d", n, s.Size())
 	}
 	if s.Empty() {
 		t.Error("Empty should be false with a non-empty stack")
