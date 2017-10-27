@@ -2,6 +2,7 @@ package util
 
 import (
 	"errors"
+	"fmt"
 )
 
 type linkedListItem struct {
@@ -73,4 +74,87 @@ func (l *LinkedList) Prepend(element interface{}) {
 		l.tail = &li
 	}
 	l.size++
+}
+
+func (l *LinkedList) indexAt(index int) (*linkedListItem, error) {
+	if l.size == 0 || index < 0 || index >= l.size {
+		return nil, errors.New("index out of bounds")
+	}
+
+	var element = l.head
+	for i := 0; i < index; i++ {
+		element = element.next
+	}
+	return element, nil
+}
+
+// ElementAt returns the element at the given index.
+// Fails if the index is greater than the list size.
+// First index starts at 0.
+func (l *LinkedList) ElementAt(index int) (interface{}, error) {
+	var item, err = l.indexAt(index)
+	if err != nil {
+		return nil, err
+	}
+	return *item.item, nil
+}
+
+// InsertAt adds the given element next to the given index.
+// See also: ElementAt(index).
+func (l *LinkedList) InsertAt(element interface{}, index int) error {
+	if index == l.size {
+		l.Append(element)
+		return nil
+	}
+	var item, err = l.indexAt(index)
+	if err != nil {
+		return err
+	}
+
+	var newItem = linkedListItem{
+		next: item,
+		item: &element,
+	}
+
+	var prevItem = item.prev
+	if prevItem != nil {
+		prevItem.next = &newItem
+		newItem.prev = prevItem
+	}
+	item.prev = &newItem
+
+	return nil
+}
+
+// RemoveAt removes the element at the given index.
+// See also: ElementAt(index)
+func (l *LinkedList) RemoveAt(index int) error {
+	var item, err = l.indexAt(index)
+	if err != nil {
+		return err
+	}
+	var prevItem = item.prev
+	var nextItem = item.next
+	if prevItem != nil {
+		prevItem.next = item.next
+	}
+	if nextItem != nil {
+		nextItem.prev = item.prev
+	}
+	return nil
+}
+
+func (l *LinkedList) String() string {
+	var sb string
+	var s string
+	var item = l.head
+	for i := 0; i < l.size; i++ {
+		s = fmt.Sprint(*item.item)
+		if i > 0 {
+			sb += ", "
+		}
+		sb += s
+		item = item.next
+	}
+	return fmt.Sprintf("[%v]", sb)
 }
